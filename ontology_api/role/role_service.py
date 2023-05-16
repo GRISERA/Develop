@@ -156,8 +156,12 @@ class RoleService:
 
         roles = []
 
-        for prop in onto.object_properties() + onto.data_properties():
+        for prop in onto.object_properties():
+            for subj, obj in prop.get_relations():
+                if subj.label[0] == instance_name:
+                    roles.append(RoleModelIn(role=prop.name, instance_name=subj.label[0], value=obj.label[0]))
 
+        for prop in onto.data_properties():
             for subj, obj in prop.get_relations():
                 if subj.label[0] == instance_name:
                     roles.append(RoleModelIn(role=prop.name, instance_name=subj.label[0], value=obj.label[0]))
