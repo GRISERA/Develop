@@ -37,6 +37,22 @@ class OntologyApiService:
                                 params=params).json()
         return response
 
+    def delete(self, url_part, params):
+        """
+        Send request get to Graph API
+
+        Args:
+            url_part (str): Part to add at the end of url
+            params (dict): Parameters of request
+
+        Returns:
+            Result of request
+        """
+
+        response = requests.delete(url=self.ontology_api_url + url_part,
+                                   params=params).json()
+        return response
+
     def add_instance(self, model_id, class_name, instance_label):
         """
         Send a request to add an instance to Ontology API
@@ -49,6 +65,17 @@ class OntologyApiService:
         """
         request_body = {"name": instance_label}
         return self.post(f"/models/{model_id}/classes/{class_name}/instances", request_body)
+
+    def delete_roles(self, model_id, instance_label):
+        """
+        Send a request to delete roles of the instance to Ontology API
+        Args:
+            instance_label (str): Label of instance
+            model_id (int): ID of the model to which the instance is to be added
+
+        Returns: Request result
+        """
+        return self.delete(f"/models/{model_id}/instances/{instance_label}/roles", {})
 
     def add_role(self, model_id, role, instance_label, value):
         """
@@ -99,4 +126,3 @@ class OntologyApiService:
         """
         url_part = f"/models/{model_id}/instances/{experiment_label}/reversed_roles"
         return self.get(url_part, {})
-
